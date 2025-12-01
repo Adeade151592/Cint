@@ -1,7 +1,7 @@
 locals {
   tags = {
     project     = var.name
-    environment = "dev"
+    environment = var.environment
     cost-center = "engineering"
     auto-stop   = "true"
   }

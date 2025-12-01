@@ -1,7 +1,7 @@
 resource "aws_budgets_budget" "monthly" {
   name         = "${var.name}-monthly-budget"
   budget_type  = "COST"
-  limit_amount = "150"
+  limit_amount = var.monthly_budget_limit
   limit_unit   = "USD"
   time_unit    = "MONTHLY"
 
@@ -15,6 +15,6 @@ resource "aws_budgets_budget" "monthly" {
     threshold                 = 80
     threshold_type            = "PERCENTAGE"
     notification_type          = "ACTUAL"
-    subscriber_email_addresses = ["admin@example.com"]
+    subscriber_email_addresses = var.notification_emails
   }
 }

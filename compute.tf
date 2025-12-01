@@ -5,6 +5,8 @@ resource "aws_lb" "main" {
   security_groups    = [aws_security_group.alb.id]
   subnets            = aws_subnet.public[*].id
 
+  drop_invalid_header_fields = true
+
   tags = local.tags
 }
 
@@ -46,7 +48,7 @@ resource "aws_launch_template" "app" {
   vpc_security_group_ids = [aws_security_group.ec2.id]
 
   user_data = base64encode(templatefile("${path.module}/user_data.sh", {
-    secret_arn = aws_secretsmanager_secret.db_password.arn
+    secret_arn = aws_rds_cluster.main.master_user_secret[0].secret_arn
   }))
 
   iam_instance_profile {
@@ -73,7 +75,7 @@ resource "aws_autoscaling_group" "app" {
 
   launch_template {
     id      = aws_launch_template.app.id
-    version = "$Latest"
+    version = "$Default"
   }
 
   tag {
@@ -123,7 +125,7 @@ resource "aws_iam_role_policy" "ec2_secrets" {
         Action = [
           "secretsmanager:GetSecretValue"
         ]
-        Resource = aws_secretsmanager_secret.db_password.arn
+        Resource = aws_rds_cluster.main.master_user_secret[0].secret_arn
       }
     ]
   })

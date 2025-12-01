@@ -35,7 +35,7 @@ variable "instance_type" {
 }
 
 variable "db_instance_class" {
-  default     = "db.r5.large"
+  default     = "db.t3.medium"
   type        = string
   description = "RDS instance class"
 }
@@ -47,7 +47,7 @@ variable "db_name" {
 }
 
 variable "db_username" {
-  default     = "admin"
+  default     = "dbadmin"
   type        = string
   description = "Database username"
 }
@@ -62,4 +62,52 @@ variable "max_size" {
   default     = 4
   type        = number
   description = "Maximum number of instances in ASG"
+}
+
+variable "environment" {
+  default     = "dev"
+  type        = string
+  description = "Environment name"
+}
+
+variable "cpu_scale_up_threshold" {
+  default     = 70
+  type        = number
+  description = "CPU threshold for scaling up"
+}
+
+variable "cpu_scale_down_threshold" {
+  default     = 30
+  type        = number
+  description = "CPU threshold for scaling down"
+}
+
+variable "monthly_budget_limit" {
+  default     = 150
+  type        = string
+  description = "Monthly budget limit in USD"
+}
+
+variable "notification_emails" {
+  default     = ["admin@example.com"]
+  type        = list(string)
+  description = "Email addresses for budget notifications"
+}
+
+variable "db_engine_version" {
+  default     = "8.0.mysql_aurora.3.04.0"
+  type        = string
+  description = "Aurora MySQL engine version"
+}
+
+variable "db_port" {
+  default     = 3306
+  type        = number
+  description = "Database port"
+}
+
+variable "domain_name" {
+  default     = ""
+  type        = string
+  description = "Domain name for SSL certificate (optional)"
 }

@@ -8,24 +8,17 @@ output "load_balancer_zone_id" {
   value       = aws_lb.main.zone_id
 }
 
-output "rds_cluster_endpoint" {
-  description = "RDS cluster endpoint"
-  value       = aws_rds_cluster.main.endpoint
-  sensitive   = true
-}
-
-output "rds_cluster_reader_endpoint" {
-  description = "RDS cluster reader endpoint"
-  value       = aws_rds_cluster.main.reader_endpoint
-  sensitive   = true
-}
-
 output "database_secret_arn" {
-  description = "ARN of the database secret in Secrets Manager"
-  value       = aws_secretsmanager_secret.db_password.arn
+  description = "ARN of the AWS managed database secret"
+  value       = aws_rds_cluster.main.master_user_secret[0].secret_arn
 }
 
 output "autoscaling_group_name" {
   description = "Name of the Auto Scaling Group"
   value       = aws_autoscaling_group.app.name
+}
+
+output "vpc_id" {
+  description = "VPC ID"
+  value       = aws_vpc.main.id
 }

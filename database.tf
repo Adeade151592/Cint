@@ -1,9 +1,3 @@
-resource "random_password" "db_password" {
-  length  = 16
-  special = true
-  override_special = "!#$%&*()-_=+[]{}<>:?"
-}
-
 resource "aws_db_subnet_group" "main" {
   name       = var.name
   subnet_ids = aws_subnet.private[*].id
@@ -12,19 +6,19 @@ resource "aws_db_subnet_group" "main" {
 }
 
 resource "aws_rds_cluster" "main" {
-  cluster_identifier         = var.name
-  engine                     = "aurora-mysql"
-  engine_version             = "8.0.mysql_aurora.3.04.0"
-  database_name              = var.db_name
-  master_username            = var.db_username
-  master_password            = random_password.db_password.result
-  backup_retention_period    = 1
-  preferred_backup_window    = "07:00-09:00"
-  db_subnet_group_name       = aws_db_subnet_group.main.name
-  vpc_security_group_ids     = [aws_security_group.rds.id]
-  skip_final_snapshot        = true
-  deletion_protection        = false
-  storage_encrypted          = true
+  cluster_identifier          = var.name
+  engine                      = "aurora-mysql"
+  engine_version              = var.db_engine_version
+  database_name               = var.db_name
+  master_username             = var.db_username
+  manage_master_user_password = true
+  backup_retention_period     = 1
+  preferred_backup_window     = "07:00-09:00"
+  db_subnet_group_name        = aws_db_subnet_group.main.name
+  vpc_security_group_ids      = [aws_security_group.rds.id]
+  skip_final_snapshot         = var.environment == "dev" ? true : false
+  deletion_protection         = var.environment == "prod" ? true : false
+  storage_encrypted           = true
 
   tags = local.tags
 }

@@ -1,11 +1,19 @@
-# Terraform files
+# Terraform
 *.tfstate
 *.tfstate.*
 .terraform/
 .terraform.lock.hcl
-terraform.tfvars
 *.tfvars
+*.tfvars.json
 
-# OS files
+# Go
+test/go.sum
+test/vendor/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
 .DS_Store
 Thumbs.db

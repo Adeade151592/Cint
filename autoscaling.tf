@@ -22,9 +22,10 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
   namespace           = "AWS/EC2"
   period              = "300"
   statistic           = "Average"
-  threshold           = "70"
-  alarm_description   = "Scale up when CPU > 70%"
+  threshold           = var.cpu_scale_up_threshold
+  alarm_description   = "Scale up when CPU > ${var.cpu_scale_up_threshold}%"
   alarm_actions       = [aws_autoscaling_policy.scale_up.arn]
+  treat_missing_data  = "notBreaching"
 
   dimensions = {
     AutoScalingGroupName = aws_autoscaling_group.app.name
@@ -41,9 +42,10 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low" {
   namespace           = "AWS/EC2"
   period              = "300"
   statistic           = "Average"
-  threshold           = "30"
-  alarm_description   = "Scale down when CPU < 30%"
+  threshold           = var.cpu_scale_down_threshold
+  alarm_description   = "Scale down when CPU < ${var.cpu_scale_down_threshold}%"
   alarm_actions       = [aws_autoscaling_policy.scale_down.arn]
+  treat_missing_data  = "notBreaching"
 
   dimensions = {
     AutoScalingGroupName = aws_autoscaling_group.app.name
