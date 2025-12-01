@@ -1,4 +1,6 @@
-data "aws_availability_zones" "current" {}
+data "aws_availability_zones" "current" {
+  state = "available"
+}
 
 data "aws_ami" "amazon_linux" {
   most_recent = true
